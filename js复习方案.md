@@ -1,8 +1,75 @@
-复习方案，下面是js的重点大纲
+# 复习方案，下面是 js 的重点大纲
 
 ## 数据类型相关：
 
-### 对象深拷贝与浅拷贝，单独问了 Object.assig</font>
+## 对象深拷贝与浅拷贝，单独问了 Object.assign
+
+### 浅拷贝
+
+- 浅拷贝只复制对象第一层属性
+- 如果属性是引用类型,则复用的是引用
+- Object.assign() 展开运算符... Array.prototype.slice()
+
+### 深拷贝
+
+- 修改拷贝对象的值不影响原来的对象的值
+
+### 模拟实现一个对象的深拷贝
+
+```js
+/* 
+  局限性
+  1. 不能处理函数,Symbol,undefined
+  2. 会丢失对象的 constructor
+  3. 不能处理循环引用 
+*/
+function deepClone(obj) {
+  return JSON.parse(JSON.stringify(obj))
+}
+
+// 简易版
+function deepClone(obj) {
+  if (typeof obj !== 'object' || obj === null) {
+    return obj
+  }
+  let clone = Array.isArray(obj) ? [] : {}
+  for (const key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      clone[key] = deepClone(obj[key])
+    }
+  }
+  return clone
+}
+
+// 处理边界情况
+function deepClone(obj, hash = new WeakMap()) {
+  if (typeof obj !== 'object' || obj === null) {
+    return obj
+  }
+
+  if (obj instanceof Date) {
+    return new Date(obj)
+  }
+
+  if (obj instanceof RegExp) {
+    return new RegExp(obj)
+  }
+
+  if (hash.has(obj)) {
+    return hash.get(obj)
+  }
+
+  let clone = new obj.constructor()
+
+  //存储当前对象,防止循环引用
+  hash.set(obj, clone)
+
+  let symKeys =  Object.getOwnPropertySymbols(obj)
+  if(symKeys.length)
+}
+```
+
+###
 
 ### 什么是变量提升
 
@@ -46,11 +113,11 @@
 
 }### 什么是 _js_ 的闭包？有什么作用？
 
-### _JS_的垃圾回收站机制
+### *JS*的垃圾回收站机制
 
 ### _this_ 的指向哪几种 ？
 
-## 异步和单线程 promise相关
+## 异步和单线程 promise 相关
 
 ### 为什么会出现 _setTimeout_ 倒计时误差？如何减少
 
@@ -62,7 +129,7 @@
 
 ### _Promise_
 
-#### <font style="color:rgb(5, 7, 59);background-color:rgb(253, 253, 254);">Promise的基本原理</font>
+#### <font style="color:rgb(5, 7, 59);background-color:rgb(253, 253, 254);">Promise 的基本原理</font>
 
 <font style="color:rgb(5, 7, 59);background-color:rgb(253, 253, 254);">异步链式调用的实现</font>
 
@@ -88,11 +155,11 @@ test()### _Promise_ 和 _setTimeout_ 的区别 ?
 
 ### Promise 构造函数是同步还是异步执行，then 呢 ? Promise 如何实现 then 处理 ?
 
-### v8执行原理
+### v8 执行原理
 
 ### 谈谈你对 _JS_ 执行上下文栈
 
-### <font style="color:rgb(5, 7, 59);background-color:rgb(253, 253, 254);">对Generator的理解</font>
+### <font style="color:rgb(5, 7, 59);background-color:rgb(253, 253, 254);">对 Generator 的理解</font>
 
 ## 其他
 
@@ -130,25 +197,25 @@ test()### _Promise_ 和 _setTimeout_ 的区别 ?
 
 ### 为什么普通 _for_ 循环的性能远远高于 _forEach_ 的性能，请解释其中的原因。
 
-### js继承
+### js 继承
 
 #### <font style="color:rgb(5, 7, 59);background-color:rgb(253, 253, 254);">1. 原型链继承</font>
 
 #### <font style="color:rgb(5, 7, 59);background-color:rgb(253, 253, 254);">2. 组合式继承</font>
 
-#### <font style="color:rgb(5, 7, 59);background-color:rgb(253, 253, 254);">3. Class继承（ES6+）</font>
+#### <font style="color:rgb(5, 7, 59);background-color:rgb(253, 253, 254);">3. Class 继承（ES6+）</font>
 
-### Reflect的理解
+### Reflect 的理解
 
-### for…in、for…of和forEach有什么区别
+### for…in、for…of 和 forEach 有什么区别
 
 ### 数组合并的方法
 
-### js数组去重
+### js 数组去重
 
 ### 数组扁平化处理
 
-### **<font style="color:rgb(0, 0, 0);">说一下从输入URL到页面加载完中间发生了什么？</font>**
+### **<font style="color:rgb(0, 0, 0);">说一下从输入 URL 到页面加载完中间发生了什么？</font>**
 
 <font style="color:rgb(0, 0, 0);"></font>
 
