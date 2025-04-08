@@ -18,10 +18,11 @@
 
 ```js
 /* 
-  局限性
+  *** 扩展
   1. 不能处理函数,Symbol,undefined
-  2. 会丢失对象的 constructor
-  3. 不能处理循环引用 
+  2. 会丢失对象的 constructor (为什么会丢失JSON方法)
+  3. 不能处理循环引用 (什么是循环引用,为什么WeakMap可以解决)
+  4. js中垃圾回收机制
 */
 function deepClone(obj) {
   return JSON.parse(JSON.stringify(obj))
@@ -55,6 +56,7 @@ function deepClone(obj, hash = new WeakMap()) {
     return new RegExp(obj)
   }
 
+  // 处理循环引用
   if (hash.has(obj)) {
     return hash.get(obj)
   }
@@ -64,18 +66,44 @@ function deepClone(obj, hash = new WeakMap()) {
   //存储当前对象,防止循环引用
   hash.set(obj, clone)
 
-  let symKeys =  Object.getOwnPropertySymbols(obj)
-  if(symKeys.length)
+  // 复制 Symbol 属性
+  let symKeys = Object.getOwnPropertySymbols(obj)
+  if (symKeys.length > 0) {
+    symKeys.forEach(symKey => {
+      clone[key] = deepClone(obj[symKey], hash)
+    })
+  }
+
+  //复制普通属性
+  for (const key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      clone[key] = deepClone(obj[key], hash)
+    }
+  }
+  return clone
 }
 ```
 
-###
-
 ### 什么是变量提升
+
+- 使用 var 声明的变量或 function 声明的函数会出现变量提升
+- js 执行代码分两个阶段 创建阶段和执行阶段
+- 创建变量对象 => 建立作用域链 => 确定 this 指向
+- 扫描函数 => 扫描变量 => 处理参数
+- js 引擎从上往下依次执行
 
 ### == 和 === 的区别是什么
 
+- == 是宽泛比较 比较值
+- === 严格相等 数据类型和值都比较
+- NaN 和任何值都不想等 包括自己 NaN == NaN => false
+
 ### _JS_ 的基本数据类型有哪些？基本数据类型和引用数据类型的区别
+
+- 基础类型 String Number Boolean BigInt Symbol Undefined Null
+- 引用类型 Object RegExp Date Array Function
+- 基础存储在栈内存中 直接访问 比较实际的值 创建独立副本 本身值不变
+- 引用存储在堆内存中 引用访问 比较引用地址 复制引用地址 对象可以被修改
 
 ### 引用类型有哪些，有什么特点
 

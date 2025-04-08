@@ -37,3 +37,40 @@ function deepClone(obj, hash = new WeakMap()) {
   }
   return clone
 }
+
+function deep(obj, hash = new WeakMap()) {
+  if (typeof obj !== 'object' || obj === null) {
+    return obj
+  }
+
+  if (obj instanceof Date) {
+    return new Date(obj)
+  }
+
+  if (obj instanceof RegExp) {
+    return new RegExp(obj)
+  }
+
+  if (hash.has(obj)) {
+    return hash.get(obj)
+  }
+
+  let clone = new obj.constructor()
+
+  hash.set(obj, clone)
+
+  let symKeys = Object.getOwnPropertySymbols(obj)
+  if (symKeys.length > 0) {
+    symKeys.forEach(symKey => {
+      clone[symKey] = deep(obj[symKey], hash)
+    })
+  }
+
+  for (const key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      clone[key] = deep(obj[key], hash)
+    }
+  }
+
+  return clone
+}
