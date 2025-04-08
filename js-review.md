@@ -106,6 +106,8 @@ function deepClone(obj, hash = new WeakMap()) {
 - 引用存储在堆内存中 引用访问 比较引用地址 复制引用地址 对象可以被修改
 
 ### 引用类型有哪些，有什么特点
+- Object RegExp Date Array Function Map Set WeakMap WeakSet
+
 
 ### == 隐试转换的原理？是怎么转换的
 
