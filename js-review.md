@@ -6,8 +6,6 @@
 - 如果属性是引用类型,则复用的是引用
 - Object.assign() 展开运算符... Array.prototype.slice()
 
-### 深拷贝
-
 - 修改拷贝对象的值不影响原来的对象的值
 
 ### 模拟实现一个对象的深拷贝
@@ -16,7 +14,7 @@
 /* 
   *** 扩展
   1. 不能处理函数,Symbol,undefined
-  2. 会丢失对象的 constructor (为什么会丢失JSON方法)
+  2. 会丢失对象的 constructor (JSON方法)
   3. 不能处理循环引用 (什么是循环引用,为什么WeakMap可以解决)
   4. js中垃圾回收机制
 */
