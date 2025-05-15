@@ -6,20 +6,28 @@
     <title>Document</title>
   </head>
   <body>
+    <button id="btn">click</button>
     <script>
-      var twoSum = function (nums, target) {
-        let map = new Map()
-        for (let i = 0, len = nums.length; i < len; i++) {
-          const targetNum = target - nums[i]
-          if (map.has(targetNum)) {
-            return [map.get(targetNum), i]
-          } else {
-            map.set(nums[i], i)
-          }
-        }
+      // document.getElementById('btn').addEventListener('click', () => {
+      //   console.log(this)
+      // })
+      document.getElementById('btn').addEventListener('click', function () {
+        console.log(this)
+      })
+
+      function Parent() {
+        this.name = 'parent'
       }
-      // debugger
-      twoSum([2, 7, 11, 15], 9)
+      Parent.prototype.sayName = function () {
+        console.log(this.name)
+      }
+      const parent = new Parent()
+
+      function Child() {}
+      Child.prototype = new Parent()
+      const child = new Child()
+      child.sayName() // 'parent'
+      console.log(parent, child)
     </script>
   </body>
 </html>
