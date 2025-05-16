@@ -37,29 +37,31 @@ function deepClone1(obj, hash = new WeakMap()) {
   }
 }
 
-function numAdd(num, target) {
-  const map = new Map()
-  for (let i = 0; i < num.length; i++) {
-    const tarNum = target - num[i]
-    if (map.has(tarNum)) {
-      return map.get(tarNum, i)
-    } else {
-      map.set(tarNum, i)
+// [1] instance
+
+function myExample(obj, constructor) {
+  const prototype = constructor.prototype
+  let objProto = Object.getPrototypeOf(obj)
+  while (objProto != null) {
+    if (objProto === prototype) {
+      return true
     }
+    objProto = Object.getPrototypeOf(objProto)
   }
+  return false
 }
 
 function myInstance(obj, constructor) {
   //获取构造函数原型
   const prototype = constructor.prototype
   //获取对象原型
-  let objProto = obj.getPrototypeOf(obj)
+  let objProto = Object.getPrototypeOf(obj)
   //沿着原型链向上查找
   while (objProto != null) {
     if (objProto === prototype) {
       return true
     }
-    objProto = obj.getPrototypeOf(objProto)
+    objProto = Object.getPrototypeOf(objProto)
   }
 
   return false

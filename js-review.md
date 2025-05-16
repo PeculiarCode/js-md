@@ -18,6 +18,24 @@
   3. 不能处理循环引用 (什么是循环引用,为什么WeakMap可以解决)
   4. js中垃圾回收机制
 */
+
+//面试
+function deepClone(obj, hash = new WeakMap()) {
+  if (typeof obj !== 'object' || obj == null) {
+    return obj
+  }
+
+  if (hash.has(obj)) {
+    return hash.get(obj)
+  }
+
+  const clone = Array.isArray(obj) ? [] : {}
+  hash.set(obj, clone)
+  for (const key in obj) {
+    clone[key] = deepClone(obj[key], hash)
+  }
+}
+
 function deepClone(obj) {
   return JSON.parse(JSON.stringify(obj))
 }
@@ -107,17 +125,18 @@ function deepClone(obj, hash = new WeakMap()) {
   1. instanceof 的原理(模拟内部实现)
 
   ```js
+  // [1,2,3] instanceof Array
   function myInstance(obj, constructor) {
     //获取构造函数原型
     const prototype = constructor.prototype
     //获取对象原型
-    let objProto = obj.getPrototypeOf(obj)
+    let objProto = Object.getPrototypeOf(obj)
     //沿着原型链向上查找
     while (objProto != null) {
       if (objProto === prototype) {
         return true
       }
-      objProto = obj.getPrototypeOf(objProto)
+      objProto = Object.getPrototypeOf(objProto)
     }
 
     return false
